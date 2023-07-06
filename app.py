@@ -51,7 +51,7 @@ Demo uses OpenAI's [Whisper Base](https://huggingface.co/openai/whisper-base) mo
 
 demo = gr.Interface(
     fn=speech_to_speech_translation,
-    inputs=gr.Audio(type="filepath"),
+    inputs=gr.Audio(source="microphone", type="filepath"),
     outputs=gr.Audio(label="Generated Speech", type="numpy"),
     examples=[["./example.wav"]],
     title=title,
