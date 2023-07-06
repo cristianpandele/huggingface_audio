@@ -41,12 +41,10 @@ def speech_to_speech_translation(audio):
 
 title = "Cascaded STST"
 description = """
-Demo for cascaded speech-to-speech translation (STST), mapping from source speech in any language to target speech in English:
+Demo for cascaded speech-to-speech translation (STST), mapping from source speech in any language to target speech in English. Demo uses OpenAI's [Whisper Base](https://huggingface.co/openai/whisper-base) model for speech translation, and Microsoft's
+[SpeechT5 TTS](https://huggingface.co/microsoft/speecht5_tts) model for text-to-speech:
 
 ![Cascaded STST](https://huggingface.co/datasets/huggingface-course/audio-course-images/resolve/main/s2st_cascaded.png "Diagram of cascaded speech to speech translation")
-
-Demo uses OpenAI's [Whisper Base](https://huggingface.co/openai/whisper-base) model for speech translation, and Microsoft's
-[SpeechT5 TTS](https://huggingface.co/microsoft/speecht5_tts) model for text-to-speech.
 """
 
 demo = gr.Interface(
