@@ -68,6 +68,6 @@ file_translate = gr.Interface(
 )
 
 with demo:
-    gr.TabbedInterface([mic_transcribe, file_transcribe], ["Microphone", "Audio File"])
+    gr.TabbedInterface([mic_translate, file_translate], ["Microphone", "Audio File"])
 
 demo.launch()
