@@ -47,7 +47,9 @@ Demo for cascaded speech-to-speech translation (STST), mapping from source speec
 ![Cascaded STST](https://huggingface.co/datasets/huggingface-course/audio-course-images/resolve/main/s2st_cascaded.png "Diagram of cascaded speech to speech translation")
 """
 
-demo = gr.Interface(
+demo = gr.Blocks()
+
+mic_translate = gr.Interface(
     fn=speech_to_speech_translation,
     inputs=gr.Audio(source="microphone", type="filepath"),
     outputs=gr.Audio(label="Generated Speech", type="numpy"),
@@ -55,4 +57,17 @@ demo = gr.Interface(
     title=title,
     description=description,
 )
+
+file_translate = gr.Interface(
+    fn=speech_to_speech_translation,
+    inputs=gr.Audio(source="upload", type="filepath"),
+    outputs=gr.Audio(label="Generated Speech", type="numpy"),
+    examples=[["./example.wav"]],
+    title=title,
+    description=description,
+)
+
+with demo:
+    gr.TabbedInterface([mic_transcribe, file_transcribe], ["Microphone", "Audio File"])
+
 demo.launch()
