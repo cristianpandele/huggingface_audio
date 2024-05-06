@@ -3,8 +3,7 @@ import numpy as np
 import torch
 from datasets import load_dataset
 
-from transformers import SpeechT5ForTextToSpeech, SpeechT5HifiGan, SpeechT5Processor, pipeline
-
+from transformers import VitsModel, VitsTokenizer, pipeline
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -12,10 +11,8 @@ device = "cuda:0" if torch.cuda.is_available() else "cpu"
 asr_pipe = pipeline("automatic-speech-recognition", model="openai/whisper-base", device=device)
 
 # load text-to-speech checkpoint and speaker embeddings
-processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
-
-model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
-vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
+model = VitsModel.from_pretrained("facebook/mms-tts-deu")
+tokenizer = VitsTokenizer.from_pretrained("facebook/mms-tts-deu")
 
 embeddings_dataset = load_dataset("Matthijs/cmu-arctic-xvectors", split="validation")
 speaker_embeddings = torch.tensor(embeddings_dataset[7306]["xvector"]).unsqueeze(0)
@@ -27,8 +24,12 @@ def translate(audio):
 
 
 def synthesise(text):
-    inputs = processor(text=text, return_tensors="pt")
-    speech = model.generate_speech(inputs["input_ids"].to(device), speaker_embeddings.to(device), vocoder=vocoder)
+    inputs = tokenizer(text, return_tensors="pt")
+    input_ids = inputs["input_ids"]
+    with torch.no_grad():
+        outputs = model(input_ids)
+
+    speech = outputs["waveform"]
     return speech.cpu()
 
 
