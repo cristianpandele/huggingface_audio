@@ -11,15 +11,15 @@ device = "cuda:0" if torch.cuda.is_available() else "cpu"
 asr_pipe = pipeline("automatic-speech-recognition", model="openai/whisper-base", device=device)
 
 # load text-to-speech checkpoint and speaker embeddings
-model = VitsModel.from_pretrained("facebook/mms-tts-deu")
-tokenizer = VitsTokenizer.from_pretrained("facebook/mms-tts-deu")
+model = VitsModel.from_pretrained("facebook/mms-tts-lav")
+tokenizer = VitsTokenizer.from_pretrained("facebook/mms-tts-lav")
 
 embeddings_dataset = load_dataset("Matthijs/cmu-arctic-xvectors", split="validation")
 speaker_embeddings = torch.tensor(embeddings_dataset[7306]["xvector"]).unsqueeze(0)
 
 
 def translate(audio):
-    outputs = asr_pipe(audio, max_new_tokens=256, generate_kwargs={"task": "translate"})
+    outputs = asr_pipe(audio, max_new_tokens=256, generate_kwargs={"task": "translate", "language": "lt"})
     return outputs["text"]
 
 
