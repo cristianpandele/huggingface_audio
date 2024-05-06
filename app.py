@@ -36,13 +36,12 @@ def synthesise(text):
 def speech_to_speech_translation(audio):
     translated_text = translate(audio)
     synthesised_speech = synthesise(translated_text)
-    
+
     # normalise the speech signal
     target_dtype = np.int16
     max_range = np.iinfo(target_dtype).max
-    synthesised_speech = (synthesised_speech.numpy() * max_range).astype(np.int16)
+    synthesised_speech = (synthesised_speech.numpy() * max_range).astype(np.int16).T # Transpose to (time, channels)
     return 16000, synthesised_speech
-
 
 title = "Cascaded STST"
 description = """
